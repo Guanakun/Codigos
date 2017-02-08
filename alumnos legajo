@@ -1,0 +1,178 @@
+#include <stdio.h>
+#include <strings.h>
+
+#define NUM 2
+#define COL 30
+
+void CARGAR(char[][COL],int[],int[][3],int);
+void MIRAR(char[][COL],int[],int [][3],int);
+void ORDENAR(char[][COL],int[],int[][3], int);
+
+float PROMEDIO(int[][3],int);
+void ORDENAR_PROMEDIO(char[][COL],int[],int[][3],int);
+
+int BUSQUEDA(char[][COL],int);
+
+int maximo (char[][COL], int);
+
+int minimo (int[][3], int);
+int posminimo (int[][3],int);
+
+int main()
+{
+	int i,pos;
+	int LEG[NUM];
+	int NOTAS[NUM][3];
+	char NOM[NUM][COL];
+	char Diego;
+
+	CARGAR(NOM,LEG,NOTAS,NUM);
+	MIRAR(NOM,LEG,NOTAS,NUM);
+
+	ORDENAR(NOM,LEG,NOTAS,NUM);
+	MIRAR(NOM,LEG,NOTAS,NUM);
+
+	ORDENAR_PROMEDIO(NOM,LEG,NOTAS,NUM);
+	MIRAR(NOM,LEG,NOTAS,NUM);
+
+	printf("\n mostrar los datos del alumno buscado:%d",BUSQUEDA(NOM,NUM));
+
+	printf("\n\n Nota minima = %d",pos=posminimo(NOTAS,NUM));
+    printf("\n\n su posicion es = %d",pos);
+
+	printf("\n\n\n\t FIN DEL PROGRAMA\n\n\n");
+}
+
+void CARGAR(char NOM[][COL],int L[],int NOT[][3],int N)
+{	int i,j;
+		for (i = 0; i < N; i ++){
+			printf("\n INGRESE UN NOMBRE:");
+			fflush(stdin);
+			fgets( NOM[i],10,stdin );
+
+			printf("\n INGRESE SU LEGAJO:");
+			scanf("%d",&L[i]);
+
+			for (j = 0; j < 3; j ++){
+
+			printf("\n INGRESE SUS NOTAS:");
+				scanf("%d",&NOT[i][j]);
+			}
+
+		}
+}
+
+void MIRAR(char NOM[][COL],int L[],int NOT[][3],int N)
+{	int i,j;
+	printf("\n\n\t MOSTRAR VECTOR\n");
+	for (i = 0; i < N; i ++)
+		{	printf("\n\n\t Su nombre:%s\n", NOM[i]);
+			printf("\n\t Numero de legajo:%d\n", L[i]);
+			for(j=0; j<3; j++)
+				printf("\n\t mostrar nota:%d\n",NOT[i][j]);
+			}
+}
+
+void ORDENAR(char NOM[][COL],int L[],int NOT[][3],int N)
+{	int i,j;
+	int AUXN,AUXL,m;
+	char AUX[COL];
+	for (i = 0; i < N-1; i++)
+			for(j = 0; j < N-i-1; j++)
+				if (strcmp(NOM[j] , NOM[j+1])>0){
+
+						strcpy(AUX , NOM[j]);
+						strcpy(NOM[j] , NOM[j+1]);
+						strcpy(NOM[j+1] , AUX);
+
+						AUXN=L[j];
+						L[j]=L[j+1];
+						L[j+1]=AUXN;
+
+					for(m=0;m<3; m++)
+					{
+						AUXN= NOT[j][m];
+						NOT [j][m]= NOT[j+1][m];
+						NOT [j+1][m]=AUXN;
+					}
+				}
+}
+
+float PROMEDIO(int NOT[][3], int N)
+{ int suma,I;
+	  suma=0;
+	for (I=0;I<3;I++)
+	{
+		suma+=NOT[N][3];
+	}
+	return (float)suma/3;
+}
+
+void ORDENAR_PROMEDIO(char NOM[][COL],int L[],int NOT[][3], int N)
+{	int i,j;
+	int AUXN,AUXL,m;
+	char AUX[COL];
+
+	for (i = 0; i < N; i++)
+			for(j = 0; j < N-i-1; j++)
+				if ( ( PROMEDIO(NOT, j)) > (PROMEDIO(NOT, j+1) )){
+
+						strcpy(AUX , NOM[j]);
+						strcpy(NOM[j] , NOM[j+1]);
+						strcpy(NOM[j+1] , AUX);
+
+						AUXN=L[j];
+						L[j]=L[j+1];
+						L[j+1]=AUXN;
+
+					for(m=0;m<3; m++)
+					{
+						AUXN= NOT [j][m];
+						NOT [j][m]= NOT [j+1][m];
+						NOT [j+1][m]=AUXN;
+					}
+				}
+}
+
+int BUSQUEDA(char NOM[][COL],int N)
+{ int i;
+	char buscado [30];
+	for (i=0; i<NUM; i++)
+	if (strcmp(NOM[i],buscado)==0)
+ 		return i;
+	return -1;
+
+}
+
+int maximo (char NOM[][COL], int N)
+{
+	int i;
+	char Mejor_alumno[30];
+	for(i=0;i<N;i++)
+		if(strcmp(NOM[i],Mejor_alumno)==0)
+			return i;
+
+}
+
+int minimo (int NOT[][3], int N)
+{
+	int i,notamin;
+	if (NOT[NUM][3]<notamin)
+    notamin = NOT[NUM][0];
+	for(i=0;i<3;i++)
+		if(NOT[NUM][i]<notamin)
+			notamin=i;
+	return notamin;
+}
+
+int posminimo (int NOT[][3], int N)
+{ int i, notmin, posmin;
+
+    notmin= NOT[0][0];
+    posmin=0;
+	for(i = 1 ; i < N; i++)
+		if(NOT[i][3]<posmin)
+                posmin=i;
+   return posmin;
+
+}
